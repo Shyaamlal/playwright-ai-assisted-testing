@@ -86,6 +86,29 @@ Full checklist: `docs/concepts/review-checklist.md`
 
 ---
 
+## How to Go From Artifact to Page Object
+
+When the locator review artifact is complete (Sections 1–3 agreed), building the page object is not creative — it's mechanical. The reasoning that went into the artifact does the work. Here's the process:
+
+**Step 1 — Read Section 3 (agreed locators).** That's the direct source. Every row becomes either a locator property or a method.
+
+**Step 2 — Apply project conventions:**
+- Locators → `readonly` properties, named descriptively (`firstNameInput` not `firstName`)
+- Actions → `async` methods, named with verbs (`fillForm`, `goBackToCart`)
+- One method per user action — don't combine things that could fail independently
+- Match naming patterns from existing page objects so the codebase feels consistent
+
+**Step 3 — Apply language constraints:**
+- Some names are reserved words in JavaScript (`continue`, `delete`, `class`) — rename them (`clickContinue`, not `continue`)
+
+**Step 4 — Apply scope discipline:**
+- If something is marked deferred in the artifact, don't build it
+- Lean page object — only what current tests need
+
+**The principle:** No invention at implementation time. All decisions happened in the artifact. Building the page object should feel like filling in a template, not making new choices.
+
+---
+
 ## Sources
 - `docs/artifacts/ProductsPage Locator Review.md` — the full review artefact
 - `docs/concepts/review-checklist.md` — living checklist, grows with each section

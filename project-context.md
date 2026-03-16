@@ -89,7 +89,8 @@ Building organically — no fixed timeline. Topics are covered when ready, not o
 **Key learning documents:**
 - `docs/learning/01-locators-and-html.md`
 - `docs/learning/02-assertions.md`
-- `docs/concepts/testing-framework.md` (comprehensive process guide)
+- `docs/concepts/process.md` (comprehensive process guide)
+- `docs/concepts/foundations.md` (testing concepts reference)
 
 **Configuration:**
 - `playwright.config.ts` configured with `testIdAttribute: 'data-test'`
@@ -121,8 +122,10 @@ playwright-e2e-framework-demo/
 │   │   ├── 01-locators-and-html.md
 │   │   └── 02-assertions.md
 │   └── concepts/
-│       ├── testing-framework.md
-│       └── glossary.md
+│       ├── foundations.md
+│       ├── process.md
+│       ├── review-checklist.md
+│       └── web-fundamentals.md
 ├── .github/
 │   └── workflows/
 │       └── playwright.yml

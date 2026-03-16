@@ -112,6 +112,45 @@ After every Playwright MCP scrape, close the browser with `mcp__playwright__brow
 
 ---
 
+## Section 4 — Q&A
+
+Questions raised during human inspection, answered during review session.
+
+---
+
+**Q: How do I know if something is a text element?**
+
+You can't tell from the screen alone. Open DevTools → hover over the element → the Elements panel shows the HTML tag (`div`, `span`, `p`, `button`, `a`). The tag determines the element's role:
+- `<button>` → clickable, submits actions
+- `<a>` → link, navigates somewhere
+- `<div>`, `<span>`, `<p>` → generic containers that hold text or other elements
+
+Visual appearance (bold, underlined, coloured) is CSS — it can make a `div` *look* like a link without it being one. DevTools tells you what it actually is. Example from this page: `inventory-item-name` looks like a link but is a `div`. The actual link is `item-0-title-link` (an `<a>` tag).
+
+---
+
+**Q: VS Code autocompleted with Tab — how did it know the value?**
+
+VS Code's IntelliSense pattern-matches strings already in your codebase — `products.ts`, existing page objects, other test files. It's not "knowing" SauceDemo; it's reading your project. The more consistent your naming, the more useful the autocomplete becomes.
+
+---
+
+**Q: How do we handle multiple products in the cart?**
+
+The `remove-{slug}` pattern handles any number of items without new abstractions. The slugs are the same ones already in `PRODUCTS` test data — no new constants needed:
+
+```typescript
+await cartPage.removeItem(PRODUCTS.backpack.remove)
+// → clicks [data-test="remove-sauce-labs-backpack"]
+
+await cartPage.removeItem(PRODUCTS.bikeLight.remove)
+// → clicks [data-test="remove-sauce-labs-bike-light"]
+```
+
+The method takes a slug parameter. The abstraction is the parameter, not a new class or constant.
+
+---
+
 ## Deferred Decisions
 
 | Decision | Trigger |
