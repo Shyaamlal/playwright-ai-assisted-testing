@@ -1,21 +1,21 @@
 {
-  "name": "playwright-e2e-framework-demo",
+  "name": "playwright-ai-assisted-testing",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shyaamlal/playwright-e2e-framework-demo.git"
+    "url": "git+https://github.com/Shyaamlal/playwright-ai-assisted-testing.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/Shyaamlal/playwright-e2e-framework-demo/issues"
+    "url": "https://github.com/Shyaamlal/playwright-ai-assisted-testing/issues"
   },
-  "homepage": "https://github.com/Shyaamlal/playwright-e2e-framework-demo#readme",
+  "homepage": "https://github.com/Shyaamlal/playwright-ai-assisted-testing#readme",
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.2.3",

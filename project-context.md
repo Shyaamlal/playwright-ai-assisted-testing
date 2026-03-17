@@ -56,7 +56,7 @@ Building organically — no fixed timeline. Topics are covered when ready, not o
 ### Day 1 (Feb 14, 2026) - Environment & Setup ✅
 **Accomplished:**
 - Installed VS Code, Node.js v24.13.1, Claude Code
-- Created GitHub repository: `playwright-e2e-framework-demo`
+- Created GitHub repository: `playwright-ai-assisted-testing`
 - Initialized Playwright with TypeScript + GitHub Actions
 - Ran sample tests (6 tests across 3 browsers)
 - CI/CD pipeline working automatically
@@ -108,7 +108,7 @@ Building organically — no fixed timeline. Topics are covered when ready, not o
 
 **Repository structure:**
 ```
-playwright-e2e-framework-demo/
+playwright-ai-assisted-testing/
 ├── tests/
 │   ├── add-to-cart.spec.ts
 │   ├── login.spec.ts

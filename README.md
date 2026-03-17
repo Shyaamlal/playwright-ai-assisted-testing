@@ -76,7 +76,7 @@ npx playwright show-report
 ## Project Structure
 
 ```
-playwright-e2e-framework-demo/
+playwright-ai-assisted-testing/
 ├── pages/                        # Page object classes
 │   ├── login-page.ts
 │   ├── products-page.ts

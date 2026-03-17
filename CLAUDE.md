@@ -148,7 +148,7 @@ If any item fails, fix it before presenting. Flag to Shyaamlal if a trade-off de
 ## 6. Folder Structure
 
 ```
-playwright-e2e-framework-demo/
+playwright-ai-assisted-testing/
 ├── pages/                    # Page object files (*.ts)
 ├── tests/                    # All test files (*.spec.ts)
 ├── docs/
