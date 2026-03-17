@@ -206,6 +206,8 @@ components/
 
 **When to introduce:** When you build the second or third page object and feel the duplication pain. Not before.
 
+**Same `data-test` value ≠ shared component.** If `cancel` appears on CheckoutInfoPage and CheckoutOverviewPage, that's coincidental naming — each page defines its own `cancelButton` independently. A shared component is only warranted when the *same rendered element* (e.g. the header, cart icon) appears across multiple pages and duplication is causing real maintenance pain.
+
 ---
 
 ## 10. User Journeys Across Multiple Pages
@@ -230,6 +232,55 @@ test('should complete checkout', async ({ page }) => {
 - No page object knows about another page object
 - If the journey changes, update the test — not the page objects
 - State transfers via browser/server (see section 4 above)
+
+---
+
+## 11. Hard vs Soft Assertions
+
+**Hard assertion (default):** Stops the test immediately on failure.
+```typescript
+await expect(page).toHaveURL(/checkout-complete.html/); // fails → test stops here
+```
+Use for: critical checks where continuing makes no sense (wrong page, login failed).
+
+**Soft assertion:** Records the failure but lets the test continue. All soft failures are reported together at the end.
+```typescript
+await expect.soft(overviewPage.subtotalLabel).toHaveText('Item total: $29.99');
+await expect.soft(overviewPage.taxLabel).toHaveText('Tax: $2.40');
+await expect.soft(overviewPage.totalLabel).toHaveText('Total: $32.39');
+// if subtotal fails, tax and total still run — you see all three results
+```
+Use for: related checks where you want to see all failures at once (price breakdown, form validation errors).
+
+**Rule of thumb:**
+- Navigation and page transitions → hard
+- Related data checks (prices, totals, labels) → soft
+
+---
+
+## 12. Asserting Page Transitions — URL vs Element
+
+Two approaches to verify you're on the right page after navigation:
+
+**URL assertion:**
+```typescript
+await expect(page).toHaveURL(/cart.html/);
+```
+- Fast to write, catches routing bugs
+- Brittle if URLs change (implementation detail)
+- Use regex partial match — never assert the full URL string
+
+**Element assertion (more resilient):**
+```typescript
+await expect(cartPage.checkoutButton).toBeVisible();
+```
+- Tied to what the user sees, not implementation
+- Survives URL refactoring
+- More meaningful: confirms the right *content* loaded, not just the right address
+
+**When you don't know the URL:** use element assertions. Assert the most distinctive element on that page — the one that could only exist if the right page loaded. For example, `confirmationPage.successHeader` can only be visible if the order actually completed.
+
+**In practice:** use both. URL check for fast routing verification, element check for meaningful state confirmation.
 
 ---
 

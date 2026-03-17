@@ -77,11 +77,16 @@ use: {
 - **AI Role:** Test generator, debugger, maintainer
 
 ### Process
-1. Human defines test scope and acceptance criteria
-2. AI generates test implementation
-3. AI verifies tests pass across all browsers
-4. Human reviews locator choices and test design
-5. AI iterates based on feedback
+
+**For every new page object, follow this sequence — no exceptions:**
+
+1. **Human inspection first** — Shyaamlal opens the page in the browser and fills in `docs/artifacts/[PageName] Human Inspection.md` (template: `docs/templates/human-inspection.md`). Do not proceed until this is done.
+2. **AI scrape** — Claude scrapes the page using Playwright MCP to catch anything missed visually.
+3. **Compare** — resolve any discrepancies between human and AI observations.
+4. **Artifact** — build the locator review artifact in `docs/artifacts/`.
+5. **Page object** — write the TypeScript page object in `pages/`.
+6. **TypeScript check** — run `npx tsc --noEmit` across all pages. Fix all errors before proceeding.
+7. Human reviews and approves before committing.
 
 ### Quality Gates
 - Tests are verified by the human after generation
@@ -144,16 +149,25 @@ If any item fails, fix it before presenting. Flag to Shyaamlal if a trade-off de
 
 ```
 playwright-e2e-framework-demo/
+├── pages/                    # Page object files (*.ts)
 ├── tests/                    # All test files (*.spec.ts)
 ├── docs/
+│   ├── artifacts/           # Locator review + human inspection per page
+│   ├── concepts/            # Testing concepts and glossary
 │   ├── learning/            # Daily learning notes
-│   └── concepts/            # Testing concepts and glossary
+│   └── templates/           # Reusable templates
 ├── .github/
 │   └── workflows/           # CI/CD configuration
 ├── playwright.config.ts      # Playwright configuration
-├── package.json             # Project dependencies
+├── tsconfig.json             # TypeScript configuration — required for tsc --noEmit
+├── package.json             # Project dependencies — must include typescript as devDependency
 └── CLAUDE.md               # This file - AI collaboration guide
 ```
+
+### Required project setup (verify before first page object)
+- [ ] `tsconfig.json` exists with `"lib": ["ES2020", "DOM"]`
+- [ ] `typescript` is in `devDependencies` in `package.json`
+- [ ] `npx tsc --noEmit` runs cleanly with no errors
 
 ### Naming Conventions
 - Test files: `{feature-name}.spec.ts`
