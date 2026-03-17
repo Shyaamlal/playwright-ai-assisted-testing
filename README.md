@@ -1,60 +1,71 @@
-# Playwright E2E Framework - AI-Native Testing
+# Playwright E2E Framework — AI-Native Test Automation
 
-A Playwright TypeScript framework demonstrating an AI-native approach to test automation, where human test strategy meets AI-powered implementation.
-
----
-
-## Overview
-
-This framework demonstrates an **AI-native workflow** for test automation. In this approach:
-
-- **The tester acts as strategist** - defining scope, acceptance criteria, and test design decisions
-- **Claude Code generates and maintains the test code** - handling implementation, debugging, and maintenance
-- **The tester reviews and validates** - ensuring quality, locator choices, and test design align with best practices
-
-This framework demonstrates how strategic testing expertise can be combined with AI-powered code generation to accelerate development and maintain test suites efficiently.
+A Playwright TypeScript framework for end-to-end testing of SauceDemo, built using a systematic, documented process where every test decision is traceable.
 
 ---
 
-## Framework Capabilities
+## The Process
 
-### Core Testing Features
-- **E2E testing with Playwright** - Browser automation across Chrome, Firefox, and WebKit
-- **Thoughtful locator strategy** - Prioritizing `data-test` attributes and role-based locators over fragile CSS selectors
-- **Test design principles** - Single responsibility tests, proper setup/teardown, meaningful assertions
-- **CI/CD integration** - Automated test execution via GitHub Actions on every push and PR
+Every page object follows this sequence:
 
-### AI-Native Development Practices
-- **Strategic collaboration with AI** - Clear requirements definition and systematic code review
-- **Documented learning** - Insights captured in `docs/learning/` to build reusable knowledge
-- **Quality gates** - Tests verified across browsers, locator choices reviewed, root causes fixed (never masking failures)
+```
+1. Human inspection       — open the page, observe every element, note data-test values
+2. AI scrape              — Playwright MCP scrapes all data-test attributes on the live page
+3. Compare                — resolve discrepancies between human and AI observations
+4. Locator review artifact — document agreed locators, scope decisions, Q&A, deferred decisions
+5. Page object            — write the TypeScript class
+6. TypeScript check       — npx tsc --noEmit across all files
+7. Human review           — verify locators, assertions, scope, wait strategy
+8. Commit
+```
 
----
-
-## Tech Stack
-
-- **Playwright** - Modern E2E testing framework
-- **TypeScript** - Type-safe test development
-- **GitHub Actions** - CI/CD pipeline
-- **HTML Reporter** - Visual test results with screenshots on failure
-- **Trace Viewer** - Debugging failed tests with detailed execution traces
+The artifacts are the primary record. The code is the output.
 
 ---
 
-## Running Tests Locally
+## What to Look At
+
+**If you want to see the process:**
+→ [`docs/artifacts/`](docs/artifacts/) — one locator review per page, with human + AI inspection, Q&A, and deferred decisions
+
+**If you want to see the tests:**
+→ [`tests/checkout.spec.ts`](tests/checkout.spec.ts) — full E2E checkout journey, passing on Chromium, Firefox, and WebKit
+→ [`tests/add-to-cart.spec.ts`](tests/add-to-cart.spec.ts) — add to cart with acceptance criteria
+
+**If you want to see the page objects:**
+→ [`pages/`](pages/) — six page objects covering the full SauceDemo checkout flow
+
+**If you want to see the test design approach:**
+→ [`docs/concepts/process.md`](docs/concepts/process.md) — the full testing process from strategy to maintenance
+
+---
+
+## Test Coverage
+
+| Flow | Type | Browsers | Status |
+|---|---|---|---|
+| Login — valid credentials | Happy path | Chromium, Firefox, WebKit | ✅ Passing |
+| Login — locked user | Unhappy path | Chromium, Firefox, WebKit | ✅ Passing |
+| Add to cart | Happy path | Chromium, Firefox, WebKit | ✅ Passing |
+| Full checkout (product → confirmation) | E2E | Chromium, Firefox, WebKit | ✅ Passing |
+
+---
+
+## Running the Tests
 
 ```bash
 # Install dependencies
 npm install
+npx playwright install
 
 # Run all tests
 npx playwright test
 
-# Run tests in UI mode (interactive debugging)
-npx playwright test --ui
+# Run a specific file
+npx playwright test tests/checkout.spec.ts
 
-# Run specific test file
-npx playwright test tests/add-to-cart.spec.ts
+# Run in UI mode (interactive — watch tests execute)
+npx playwright test --ui
 
 # View HTML report
 npx playwright show-report
@@ -66,39 +77,45 @@ npx playwright show-report
 
 ```
 playwright-e2e-framework-demo/
-├── tests/                    # Test files (*.spec.ts)
+├── pages/                        # Page object classes
+│   ├── login-page.ts
+│   ├── products-page.ts
+│   ├── cart-page.ts
+│   ├── checkout-info-page.ts
+│   ├── checkout-overview-page.ts
+│   └── confirmation-page.ts
+├── tests/
+│   ├── checkout.spec.ts          # E2E — full checkout journey
+│   ├── add-to-cart.spec.ts       # Add to cart
+│   ├── login.spec.ts             # Login scenarios
+│   └── test-data/                # TEST_USERS, PRODUCTS, CUSTOMER constants
 ├── docs/
-│   ├── learning/            # Daily learning notes
-│   └── concepts/            # Testing concepts and glossary
-├── .github/workflows/       # CI/CD configuration
-├── playwright.config.ts      # Playwright configuration
-├── CLAUDE.md               # AI collaboration guide
-└── README.md               # This file
+│   ├── artifacts/                # Locator review documents — one per page
+│   ├── concepts/                 # Process, locator strategy, test design reference
+│   └── templates/                # Human inspection template
+├── .github/workflows/            # CI/CD — runs on push and PR
+├── playwright.config.ts
+├── tsconfig.json
+└── CLAUDE.md                     # AI collaboration guide
 ```
 
 ---
 
-## AI-Native Approach
+## Tech Stack
 
-This framework is inspired by [Debbie O'Brien's NDC talk on AI-powered workflows with Playwright and MCP](https://youtu.be/Numb52aJkJw). The approach recognizes that AI excels at code generation and maintenance, while human testers excel at strategic thinking and quality judgment.
-
-This separation of concerns enables:
-- Focus on test strategy and coverage decisions
-- Rapid implementation and debugging through AI assistance
-- High code quality through systematic review
-- Efficient test suite scaling
+- **Playwright** — E2E testing across Chromium, Firefox, WebKit
+- **TypeScript** — type-safe page objects and tests
+- **GitHub Actions** — CI/CD on every push
+- **Claude Code** — AI-assisted scraping, code generation, and process documentation
 
 ---
 
-## Development Status
+## Status
 
-This framework is under **active development**. Current implementation includes:
-- ✅ Core Playwright setup with TypeScript
-- ✅ Locator best practices (data-test attributes, role-based selectors)
-- ✅ CI/CD pipeline with GitHub Actions
-- ✅ HTML reporting and screenshot capture
-- 🚧 Expanding test coverage
-- 🚧 Authentication patterns with project dependencies
-- 🚧 Future MCP integration for advanced AI workflows
+SauceDemo checkout flow is complete. Next: API testing layer.
 
----
+| Layer | Status |
+|---|---|
+| Page objects — full checkout flow | ✅ Done |
+| E2E tests — checkout journey | ✅ Done |
+| API testing | 🚧 In progress |
